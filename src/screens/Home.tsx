@@ -17,10 +17,10 @@ import NewsItemPlaceholder from '../components/NewsItemPlaceholder';
 import ErrorCompoent from '../components/ErrorCompoent';
 const Home: FC<HomeScreenProps> = ({navigation}) => {
   // @ts-ignore
-  const {data, isLoading, isError, isFetching} = useGetNewsQuery();
+  const {data, isLoading, isError} = useGetNewsQuery();
 
-  const goToDetails = (data: News) => {
-    navigation.navigate('Details', data);
+  const goToDetails = (news: News) => {
+    navigation.navigate('Details', news);
   };
   const renderItem: ListRenderItem<News> = ({item, index}) => {
     return (

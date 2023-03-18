@@ -25,7 +25,7 @@ export const apiSlice = createApi({
     // The `getPosts` endpoint is a "query" operation that returns data
     getNews: builder.query<News[], void>({
       // The URL for the request is '/fakeApi/posts'
-      query: () => `/article-date/01-04-2021`,
+      query: () => '/article-date/01-04-2021',
       transformResponse(baseQueryReturnValue: any) {
         let result = baseQueryReturnValue.slice(0, 20);
         console.log({result});
