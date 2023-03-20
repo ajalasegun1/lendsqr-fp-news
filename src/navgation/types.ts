@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Details: News;
   SignupForm: undefined;
   Signup: undefined;
+  Login: undefined;
 };
 
 export type HomeScreenProps = NativeStackScreenProps<
@@ -22,4 +23,8 @@ export type FormScreenProps = NativeStackScreenProps<
 export type SignupScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'Signup'
+>;
+export type LoginScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'Login'
 >;

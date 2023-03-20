@@ -57,6 +57,8 @@ const SignupForm: FC<FormScreenProps> = ({navigation}) => {
     navigation.push('Signup');
   };
 
+  const goToLogin = () => navigation.push('Login');
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}></Text>
@@ -136,6 +138,12 @@ const SignupForm: FC<FormScreenProps> = ({navigation}) => {
           <View style={styles.btnContainer}>
             <Button title="Next" onPress={handleSubmit(onSubmit)} />
           </View>
+
+          <Text style={styles.or}>OR</Text>
+
+          <Text style={styles.login} onPress={goToLogin}>
+            Login with Google
+          </Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -173,5 +181,17 @@ const styles = StyleSheet.create({
   error: {
     fontSize: 11,
     color: 'red',
+  },
+  or: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginVertical: 12,
+  },
+  login: {
+    color: 'black',
+    textDecorationLine: 'underline',
+    textAlign: 'center',
   },
 });

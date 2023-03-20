@@ -8,6 +8,8 @@ import SignupForm from '../screens/SignupForm';
 import Signup from '../screens/Signup';
 import {useSelector} from 'react-redux';
 import {RootState} from '../app/store';
+import Logout from '../components/Logout';
+import Login from '../screens/Login';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,6 +25,7 @@ function RootStack() {
               component={Home}
               options={{
                 headerTitle: 'FP News',
+                headerRight: () => <Logout />,
               }}
             />
             <Stack.Screen
@@ -40,6 +43,7 @@ function RootStack() {
             }}>
             <Stack.Screen name="SignupForm" component={SignupForm} />
             <Stack.Screen name="Signup" component={Signup} />
+            <Stack.Screen name="Login" component={Login} />
           </Stack.Group>
         )}
       </Stack.Navigator>

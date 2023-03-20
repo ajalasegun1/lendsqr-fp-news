@@ -1,4 +1,4 @@
-import {Button, StyleSheet, View} from 'react-native';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {
   GoogleSignin,
@@ -13,8 +13,9 @@ GoogleSignin.configure({
   webClientId: Config.WEB_CLIENT_ID,
 });
 
-const Signup = () => {
+const Login = () => {
   const dispatch = useDispatch();
+
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
@@ -35,27 +36,27 @@ const Signup = () => {
       }
     } catch (error) {
       console.log({error});
-      // if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
-      //   // user cancelled the login flow
-      // } else if ((error as any).code === statusCodes.IN_PROGRESS) {
-      //   // operation (e.g. sign in) is in progress already
-      // } else if (
-      //   (error as any).code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
-      // ) {
-      //   // play services not available or outdated
-      // } else {
-      //   // some other error happened
-      // }
+      //   if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
+      //     // user cancelled the login flow
+      //   } else if ((error as any).code === statusCodes.IN_PROGRESS) {
+      //     // operation (e.g. sign in) is in progress already
+      //   } else if (
+      //     (error as any).code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
+      //   ) {
+      //     // play services not available or outdated
+      //   } else {
+      //     // some other error happened
+      //   }
     }
   };
   return (
     <View style={styles.container}>
-      <Button title="Sign Up with Google" onPress={signIn} />
+      <Button title={'Login with Google'} onPress={signIn} />
     </View>
   );
 };
 
-export default Signup;
+export default Login;
 
 const styles = StyleSheet.create({
   container: {

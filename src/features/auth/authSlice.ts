@@ -28,9 +28,6 @@ export const authSlice = createSlice({
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
     },
-    clearToken: state => {
-      state.token = null;
-    },
     setUser: (
       state,
       action: PayloadAction<{
@@ -51,10 +48,15 @@ export const authSlice = createSlice({
     ) => {
       state.googleUser = action.payload;
     },
+    logout: state => {
+      state.user = null;
+      state.token = null;
+      state.googleUser = null;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {setToken, clearToken, setUser, setGoogleUser} = authSlice.actions;
+export const {setToken, setUser, setGoogleUser, logout} = authSlice.actions;
 
 export default authSlice.reducer;

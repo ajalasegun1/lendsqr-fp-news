@@ -15,6 +15,7 @@ import {HomeScreenProps} from '../navgation/types';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NewsItemPlaceholder from '../components/NewsItemPlaceholder';
 import ErrorCompoent from '../components/ErrorCompoent';
+import Header from '../components/Header';
 const Home: FC<HomeScreenProps> = ({navigation}) => {
   // @ts-ignore
   const {data, isLoading, isError} = useGetNewsQuery();
@@ -55,7 +56,11 @@ const Home: FC<HomeScreenProps> = ({navigation}) => {
       {isLoading ? (
         <NewsItemPlaceholder />
       ) : (
-        <FlatList data={data} renderItem={renderItem} style={styles.flat} />
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          ListHeaderComponent={Header}
+        />
       )}
       {isError && <ErrorCompoent />}
     </SafeAreaView>
@@ -67,9 +72,6 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  flat: {
-    paddingTop: 16,
   },
   newsCard: {
     flexDirection: 'row',
