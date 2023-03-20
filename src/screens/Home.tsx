@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {useGetNewsQuery} from '../features/api/apiSlice';
 import dayjs from 'dayjs';
 import FastImage from 'react-native-fast-image';
@@ -16,13 +16,20 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import NewsItemPlaceholder from '../components/NewsItemPlaceholder';
 import ErrorCompoent from '../components/ErrorCompoent';
 import Header from '../components/Header';
+import crashlytics from '@react-native-firebase/crashlytics';
 const Home: FC<HomeScreenProps> = ({navigation}) => {
   // @ts-ignore
-  const {data, isLoading, isError} = useGetNewsQuery();
+  const {data, isLoading, isError, error: fetchError} = useGetNewsQuery();
 
   const goToDetails = (news: News) => {
     navigation.navigate('Details', news);
   };
+
+  useEffect(() => {
+    if (isError) {
+      crashlytics().recordError(fetchError as any);
+    }
+  }, [isError]);
   const renderItem: ListRenderItem<News> = ({item, index}) => {
     return (
       <TouchableOpacity

@@ -1,14 +1,12 @@
 import {Button, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import React, {useEffect} from 'react';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
 
 import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
 import {setGoogleUser, setToken} from '../features/auth/authSlice';
+import crashlytics from '@react-native-firebase/crashlytics';
 GoogleSignin.configure({
   webClientId: Config.WEB_CLIENT_ID,
 });
@@ -29,6 +27,7 @@ const Login = () => {
       console.log({result});
       if (result.additionalUserInfo?.profile) {
         const {email, name, picture} = result.additionalUserInfo?.profile;
+        await crashlytics().setUserId(email);
         dispatch(setGoogleUser({name, email, picture}));
         if (idToken) {
           dispatch(setToken(idToken));
@@ -36,6 +35,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log({error});
+      crashlytics().recordError(error as any);
       //   if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
       //     // user cancelled the login flow
       //   } else if ((error as any).code === statusCodes.IN_PROGRESS) {
@@ -49,6 +49,9 @@ const Login = () => {
       //   }
     }
   };
+  useEffect(() => {
+    crashlytics().log('Login with google screen mounted');
+  }, []);
   return (
     <View style={styles.container}>
       <Button title={'Login with Google'} onPress={signIn} />

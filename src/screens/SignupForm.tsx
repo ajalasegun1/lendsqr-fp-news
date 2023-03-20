@@ -8,7 +8,7 @@ import {
   Platform,
   Button,
 } from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -16,6 +16,7 @@ import * as yup from 'yup';
 import {useDispatch} from 'react-redux';
 import {setUser} from '../features/auth/authSlice';
 import {FormScreenProps} from '../navgation/types';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const schema = yup
   .object({
@@ -58,6 +59,10 @@ const SignupForm: FC<FormScreenProps> = ({navigation}) => {
   };
 
   const goToLogin = () => navigation.push('Login');
+
+  useEffect(() => {
+    crashlytics().log('App mounted with user not signed up or logged in');
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

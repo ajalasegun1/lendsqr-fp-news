@@ -1,9 +1,10 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {DetailScreenProps} from '../navgation/types';
 import FastImage from 'react-native-fast-image';
 import dayjs from 'dayjs';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import crashlytic from '@react-native-firebase/crashlytics';
 
 const Details: FC<DetailScreenProps> = ({route}) => {
   const {
@@ -14,6 +15,10 @@ const Details: FC<DetailScreenProps> = ({route}) => {
     publishedAt,
     minutesToRead,
   } = route.params;
+
+  useEffect(() => {
+    crashlytic().log('News details screen mounted');
+  }, []);
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView style={styles.container}>

@@ -1,14 +1,22 @@
 import {Button, Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {RootState} from '../app/store';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const Header = () => {
   const user = useSelector((state: RootState) => state.authReducer.googleUser);
+  const crash = async () => {
+    crashlytics().log('Crash button cliked');
+    crashlytics().crash();
+  };
+  useEffect(() => {
+    crashlytics().log('Home screen mounted');
+  }, []);
   return (
     <View style={styles.container}>
       <View>
-        <Button title="Crash" />
+        <Button title="Crash" onPress={crash} />
       </View>
       <View style={styles.left}>
         <Text style={styles.welcome}>
