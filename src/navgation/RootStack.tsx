@@ -6,34 +6,42 @@ import Home from '../screens/Home';
 import {RootStackParamList} from './types';
 import SignupForm from '../screens/SignupForm';
 import Signup from '../screens/Signup';
+import {useSelector} from 'react-redux';
+import {RootState} from '../app/store';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootStack() {
+  const token = useSelector((state: RootState) => state.authReducer.token);
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Group
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <Stack.Screen name="SignupForm" component={SignupForm} />
-          <Stack.Screen name="Signup" component={Signup} />
-        </Stack.Group>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerTitle: 'FP News',
-          }}
-        />
-        <Stack.Screen
-          name="Details"
-          component={Details}
-          options={{
-            headerTitle: '',
-          }}
-        />
+        {token ? (
+          <Stack.Group>
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{
+                headerTitle: 'FP News',
+              }}
+            />
+            <Stack.Screen
+              name="Details"
+              component={Details}
+              options={{
+                headerTitle: '',
+              }}
+            />
+          </Stack.Group>
+        ) : (
+          <Stack.Group
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <Stack.Screen name="SignupForm" component={SignupForm} />
+            <Stack.Screen name="Signup" component={Signup} />
+          </Stack.Group>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

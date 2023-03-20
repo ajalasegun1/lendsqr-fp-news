@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {
   GoogleSignin,
@@ -9,21 +9,33 @@ GoogleSignin.configure({
   webClientId: Config.WEB_CLIENT_ID,
 });
 import auth from '@react-native-firebase/auth';
+import {useDispatch} from 'react-redux';
+import {setGoogleUser, setToken} from '../features/auth/authSlice';
 
 console.log(Config.WEB_CLIENT_ID);
 
 const Signup = () => {
+  const dispatch = useDispatch();
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const {idToken} = await GoogleSignin.signIn();
+      console.log({idToken});
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
       // Sign-in the user with the credential
-      const result = auth().signInWithCredential(googleCredential);
+      const result = await auth().signInWithCredential(googleCredential);
       console.log({result});
+      if (result.additionalUserInfo?.profile) {
+        const {email, name, picture} = result.additionalUserInfo?.profile;
+        dispatch(setGoogleUser({name, email, picture}));
+        if (idToken) {
+          dispatch(setToken(idToken));
+        }
+      }
     } catch (error) {
+      console.log({error});
       if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if ((error as any).code === statusCodes.IN_PROGRESS) {
@@ -39,7 +51,7 @@ const Signup = () => {
   };
   return (
     <View style={styles.container}>
-      <Text>Signup</Text>
+      <Button title="Sign Up" onPress={signIn} />
     </View>
   );
 };

@@ -8,11 +8,17 @@ export interface AuthState {
     phoneNumber: string;
     email: string;
   } | null;
+  googleUser: {
+    name: string;
+    picture: string;
+    email: string;
+  } | null;
 }
 
 const initialState: AuthState = {
   token: null,
   user: null,
+  googleUser: null,
 };
 
 export const authSlice = createSlice({
@@ -35,10 +41,20 @@ export const authSlice = createSlice({
     ) => {
       state.user = action.payload;
     },
+    setGoogleUser: (
+      state,
+      action: PayloadAction<{
+        name: string;
+        picture: string;
+        email: string;
+      }>,
+    ) => {
+      state.googleUser = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {setToken, clearToken, setUser} = authSlice.actions;
+export const {setToken, clearToken, setUser, setGoogleUser} = authSlice.actions;
 
 export default authSlice.reducer;
