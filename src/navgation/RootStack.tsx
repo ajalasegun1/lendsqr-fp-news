@@ -1,5 +1,8 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Details from '../screens/Details';
 import Home from '../screens/Home';
@@ -10,13 +13,33 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../app/store';
 import Logout from '../components/Logout';
 import Login from '../screens/Login';
+import analytics from '@react-native-firebase/analytics';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootStack() {
   const token = useSelector((state: RootState) => state.authReducer.token);
+  const navigationRef = useNavigationContainerRef();
+  const routeNameRef = React.useRef<string>();
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef?.current?.getCurrentRoute()?.name;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef?.current;
+        const currentRouteName =
+          navigationRef?.current?.getCurrentRoute()?.name;
+
+        if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+        routeNameRef.current = currentRouteName;
+      }}>
       <Stack.Navigator>
         {token ? (
           <Stack.Group>

@@ -7,6 +7,8 @@ import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
 import {setGoogleUser, setToken} from '../features/auth/authSlice';
 import crashlytics from '@react-native-firebase/crashlytics';
+import analytics from '@react-native-firebase/analytics';
+
 GoogleSignin.configure({
   webClientId: Config.WEB_CLIENT_ID,
 });
@@ -24,10 +26,12 @@ const Login = () => {
 
       // Sign-in the user with the credential
       const result = await auth().signInWithCredential(googleCredential);
-      console.log({result});
       if (result.additionalUserInfo?.profile) {
         const {email, name, picture} = result.additionalUserInfo?.profile;
         await crashlytics().setUserId(email);
+        await analytics().logLogin({
+          method: 'google.com',
+        });
         dispatch(setGoogleUser({name, email, picture}));
         if (idToken) {
           dispatch(setToken(idToken));
