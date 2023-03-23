@@ -92,7 +92,6 @@ const SignupForm: FC<FormScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}></Text>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>

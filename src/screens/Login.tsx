@@ -1,8 +1,7 @@
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
-
 import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
 import {setGoogleUser, setToken} from '../features/auth/authSlice';

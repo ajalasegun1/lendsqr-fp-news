@@ -29,7 +29,7 @@ const Home: FC<HomeScreenProps> = ({navigation}) => {
     if (isError) {
       crashlytics().recordError(fetchError as any);
     }
-  }, [isError]);
+  }, [isError, fetchError]);
   const renderItem: ListRenderItem<News> = ({item, index}) => {
     return (
       <TouchableOpacity
