@@ -7,6 +7,7 @@ import {
   View,
   Platform,
   Button,
+  Alert,
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -18,6 +19,8 @@ import {setUser} from '../features/auth/authSlice';
 import {FormScreenProps} from '../navgation/types';
 import crashlytics from '@react-native-firebase/crashlytics';
 import remoteConfig from '@react-native-firebase/remote-config';
+import {requestUserPermission} from '../utils/messagingPermission';
+import messaging from '@react-native-firebase/messaging';
 
 const schema = yup
   .object({
@@ -87,8 +90,26 @@ const SignupForm: FC<FormScreenProps> = ({navigation}) => {
   }, []);
 
   useEffect(() => {
-    crashlytics().log('App mounted with user not signed up or logged in');
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    crashlytics().log('App mounted with user not signed up or logged in');
+    callPermission();
+  }, []);
+
+  const callPermission = async () => {
+    const res = await requestUserPermission();
+    if (!res) {
+      Alert.alert(
+        'You need to go to permissions settings to enable notifications',
+      );
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
