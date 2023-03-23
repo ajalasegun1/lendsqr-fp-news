@@ -1385,6 +1385,11 @@
   dependencies:
     "@expo/config-plugins" "^5.0.4"
 
+"@react-native-firebase/remote-config@^17.3.2":
+  version "17.3.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-17.3.2.tgz#5c48a89ac2e1a8ddcd8ce0d7761e1f9e74616581"
+  integrity sha512-a7y34HCUonzZhzB5K6y0OG5H+6nnFaD05bFMcpsxGVoQDEy2N2ExfIk5w6Xy0iwUN6qi2Rv3AnLp8J0otCS5Tg==
+
 "@react-native-google-signin/google-signin@^9.0.2":
   version "9.0.2"
   resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-9.0.2.tgz#fd9d0cbb58591265c2ea9404b2d2ea7e514b9ea9"

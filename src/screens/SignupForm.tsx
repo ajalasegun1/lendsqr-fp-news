@@ -8,7 +8,7 @@ import {
   Platform,
   Button,
 } from 'react-native';
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useForm, Controller} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -17,6 +17,7 @@ import {useDispatch} from 'react-redux';
 import {setUser} from '../features/auth/authSlice';
 import {FormScreenProps} from '../navgation/types';
 import crashlytics from '@react-native-firebase/crashlytics';
+import remoteConfig from '@react-native-firebase/remote-config';
 
 const schema = yup
   .object({
@@ -35,6 +36,7 @@ const schema = yup
   .required();
 
 const SignupForm: FC<FormScreenProps> = ({navigation}) => {
+  const [useBlue, setUseBlue] = useState(true);
   const dispatch = useDispatch();
   const {
     control,
@@ -59,6 +61,30 @@ const SignupForm: FC<FormScreenProps> = ({navigation}) => {
   };
 
   const goToLogin = () => navigation.push('Login');
+
+  // Simple react config to change the color of the button
+  useEffect(() => {
+    remoteConfig()
+      .setDefaults({
+        button_color_blue: true,
+      })
+      .then(() => remoteConfig().fetchAndActivate())
+      .then(fetchedRemotely => {
+        if (fetchedRemotely) {
+          console.log('Configs were retrieved from the backend and activated.');
+        } else {
+          console.log(
+            'No configs were fetched from the backend, and the local configs were already activated',
+          );
+        }
+        const blueFeature = remoteConfig().getValue('button_color_blue');
+        if (blueFeature.asBoolean() === true) {
+          setUseBlue(true);
+        } else {
+          setUseBlue(false);
+        }
+      });
+  }, []);
 
   useEffect(() => {
     crashlytics().log('App mounted with user not signed up or logged in');
@@ -141,7 +167,11 @@ const SignupForm: FC<FormScreenProps> = ({navigation}) => {
           />
 
           <View style={styles.btnContainer}>
-            <Button title="Next" onPress={handleSubmit(onSubmit)} />
+            <Button
+              title="Next"
+              onPress={handleSubmit(onSubmit)}
+              color={useBlue ? '#1F75FE' : '#BEDBED'}
+            />
           </View>
 
           <Text style={styles.or}>OR</Text>
