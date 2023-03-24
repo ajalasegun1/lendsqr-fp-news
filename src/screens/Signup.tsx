@@ -1,6 +1,9 @@
 import {Button, StyleSheet, View} from 'react-native';
 import React, {useEffect} from 'react';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
 import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
@@ -38,17 +41,17 @@ const Signup = () => {
     } catch (error) {
       console.log({error});
       crashlytics().recordError(error as any);
-      // if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
-      //   // user cancelled the login flow
-      // } else if ((error as any).code === statusCodes.IN_PROGRESS) {
-      //   // operation (e.g. sign in) is in progress already
-      // } else if (
-      //   (error as any).code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
-      // ) {
-      //   // play services not available or outdated
-      // } else {
-      //   // some other error happened
-      // }
+      if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if ((error as any).code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (
+        (error as any).code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
+      ) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
     }
   };
   useEffect(() => {
